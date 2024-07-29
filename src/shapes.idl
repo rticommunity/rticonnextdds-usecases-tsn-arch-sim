@@ -1,0 +1,18 @@
+enum ShapeFillKind {
+    SOLID_FILL,
+    TRANSPARENT_FILL,
+    HORIZONTAL_HATCH_FILL,
+    VERTICAL_HATCH_FILL
+};
+
+struct ShapeType {
+    @key string<128> color;
+    long x;
+    long y;
+    long shapesize;
+};
+
+struct ShapeTypeExtended : ShapeType {
+    ShapeFillKind fillKind;
+    float angle;
+};

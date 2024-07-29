@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+(c) Copyright, Real-Time Innovations, 2024.  All rights reserved.
+RTI grants Licensee a license to use, modify, compile, and create derivative
+works of the software solely for use with RTI Connext DDS. Licensee may
+redistribute copies of the software provided that all such copies are
+subject to this license. The software is provided "as is", with no warranty
+of any type, including any warranty for fitness for any purpose. RTI is
+under no obligation to maintain or support the software. RTI shall not be
+liable for any incidental or consequential damages arising out of the use
+or inability to use the software.
+
+The QoS configuration of the DDS entities in the generated example is loaded 
+from this file.
+
+This file is used only when it is in the current working directory or when the
+environment variable NDDS_QOS_PROFILES is defined and points to this file.
+-->
+
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="https://community.rti.com/schema/current/rti_dds_qos_profiles.xsd">
+
+     <qos_library name="tsn_library">
+        <!-- QoS profile used to configure reliable communication between the DataWriter 
+             and DataReader created in the example code.
+
+             A QoS profile groups a set of related QoS.
+        -->
+        <qos_profile name="tsn_profile" base_name="BuiltinQosLib::Generic.BestEffort" is_default_qos="true">                   
+
+            <datawriter_qos>
+                <publication_name>
+                    <name>tsnDataWriter</name>
+                </publication_name>
+            </datawriter_qos>
+
+            <!-- QoS used to configure the data reader created in the example code -->                
+            <datareader_qos>
+                <subscription_name>
+                    <name>tsnDataReader</name>
+                </subscription_name>
+            </datareader_qos>
+
+            <domain_participant_qos>
+
+                <!--
+                The participant name, if it is set, will be displayed in the
+                RTI tools, making it easier for you to tell one
+                application from another when you're debugging.
+                -->
+                <participant_name>
+                    <name>surgeonConsoleParticipant</name>
+                    <role_name>surgeonConsoleParticipantRole</role_name>
+                </participant_name>
+
+                <!-- perform discovery via the default docker bridge address -->
+                <discovery>
+                    <enabled_transports>
+                        <!-- We want discovery to happen over 10.1.0.0/16 -->
+                        <element>stdnet</element>                        
+                    </enabled_transports>
+                    <initial_peers>
+                        <!-- video server-->
+                        <element>stdnet://::1#10.1.0.12</element>
+                        <!-- effector server-->
+                        <element>stdnet://::1#10.1.0.13</element>                        
+                    </initial_peers>
+                    <accept_unknown_peers>false</accept_unknown_peers>
+                </discovery>
+
+                <discovery_config>
+                    <default_domain_announcement_period>
+                      <sec>DURATION_INFINITE_SEC</sec>
+                      <nanosec>DURATION_INFINITE_NSEC</nanosec>
+                    </default_domain_announcement_period>
+                </discovery_config>
+
+                <transport_builtin>
+                    <mask>MASK_NONE</mask>
+                </transport_builtin>
+               
+                <wire_protocol>
+                    <rtps_reserved_port_mask>
+                      BUILTIN_UNICAST|BUILTIN_MULTICAST
+                    </rtps_reserved_port_mask>
+                </wire_protocol>
+                
+                <property>
+                    <value>
+                        <element>
+                            <name>dds.transport.load_plugins</name>
+                            <value>dds.transport.UDPv4.StdNet,dds.transport.UDPv4.TSNNet1,dds.transport.UDPv4.TSNNet2</value>
+                        </element>
+
+                        <element>
+                            <name>dds.transport.UDPv4.StdNet.create_function</name>
+                            <value>NDDS_Transport_UDPv4_create</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.StdNet.property_validation_action</name>
+                            <value>VALIDATION_ACTION_SKIP</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.StdNet.aliases</name>
+                            <value>stdnet</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.StdNet.network_address</name>
+                            <value>::1</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.StdNet.parent.allow_interfaces_list</name>
+                            <value>10.1.0.11</value>
+                        </element>
+
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet1.create_function</name>
+                            <value>NDDS_Transport_UDPv4_create</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet1.property_validation_action</name>
+                            <value>VALIDATION_ACTION_SKIP</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet1.aliases</name>
+                            <value>tsnnet1</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet1.network_address</name>
+                            <value>::2</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet1.parent.allow_interfaces_list</name>
+                            <value>10.2.1.11</value>
+                        </element>
+
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet2.create_function</name>
+                            <value>NDDS_Transport_UDPv4_create</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet2.property_validation_action</name>
+                            <value>VALIDATION_ACTION_SKIP</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet2.aliases</name>
+                            <value>tsnnet2</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet2.network_address</name>
+                            <value>::3</value>
+                        </element>
+                        <element>
+                            <name>dds.transport.UDPv4.TSNNet2.parent.allow_interfaces_list</name>
+                            <value>10.2.2.11</value>
+                        </element>
+
+                        <element>
+                            <name>dds.transport.UDPv4.builtin.parent.deny_interfaces_list</name>
+                            <value>lo</value>
+                        </element>
+                    </value>
+                </property>               
+
+            </domain_participant_qos>
+
+        </qos_profile>
+
+        <qos_profile name="video_profile" base_name="tsn_library::tsn_profile">
+
+            <datawriter_qos>                
+                <transport_selection>
+                    <enabled_transports>
+                      <element>tsnnet2</element>
+                    </enabled_transports>
+                </transport_selection>                
+            </datawriter_qos>
+        </qos_profile>
+
+        <qos_profile name="effector_profile" base_name="tsn_library::tsn_profile">
+
+            <datawriter_qos>               
+                <transport_selection>
+                    <enabled_transports>
+                      <element>tsnnet1</element>
+                    </enabled_transports>
+                </transport_selection>                                             
+            </datawriter_qos>   
+                      
+        </qos_profile>
+    </qos_library>
+</dds>
