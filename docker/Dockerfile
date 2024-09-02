@@ -18,11 +18,9 @@
 #
 # The container will start and run the /bin/bash shell.
 
+FROM ubuntu:jammy AS install-stage
+
 ARG CONNEXT_VERSION=7.3.0
-
-FROM --platform=${TARGETPLATFORM} ubuntu:jammy AS install-stage
-
-ARG CONNEXT_VERSION
 ARG RTI_LICENSE_AGREEMENT_ACCEPTED
 
 ENV DISPLAY=:0
@@ -81,7 +79,7 @@ RUN mkdir build && cd build && cmake .. && cmake --build . \
  
 RUN echo "source ${NDDSHOME}/resource/scripts/rtisetenv_*.bash" >> /root/.bashrc
 
-FROM --platform=${TARGETPLATFORM} scratch AS final-stage
+FROM scratch AS final-stage
 
 WORKDIR /root
 
